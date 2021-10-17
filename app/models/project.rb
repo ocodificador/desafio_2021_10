@@ -8,17 +8,25 @@ class Project < ApplicationRecord
   
 
   def delayed
-    false
+    activities.where("end_date > ?", end_date).count > 0 
+  end
+
+  def complete
+    if activities.count > 0
+      (activities.where(finished: true).count.to_f / activities.count) * 100
+    else
+      0
+    end
   end
 
   def finished
-    activities.where(finished: true).count == activities.count
+    complete == 100
   end
 
   # sobrescrevo o as_json inserindo os dois novos 'campos' no resultado 
   # e também as atividades
   def as_json(options={})
-      super(include: :activities, methods: [:delayed, :finished])
+      super(include: :activities, methods: [:delayed, :complete, :finished])
   end
 
   private
