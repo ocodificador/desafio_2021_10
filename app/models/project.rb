@@ -12,12 +12,13 @@ class Project < ApplicationRecord
   end
 
   def finished
-    false
+    activities.where(finished: true).count == activities.count
   end
 
-  # sobrescrevo o as_json inserindo os dois novos 'campos' no resultado
+  # sobrescrevo o as_json inserindo os dois novos 'campos' no resultado 
+  # e também as atividades
   def as_json(options={})
-      super(methods: [:delayed, :finished])
+      super(include: :activities, methods: [:delayed, :finished])
   end
 
   private
