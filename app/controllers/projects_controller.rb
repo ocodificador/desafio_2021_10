@@ -46,6 +46,9 @@ class ProjectsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def project_params
-      params.require(:project).permit(:name, :start_date, :end_date)
+      params.require(:project).permit(
+        :name, :start_date, :end_date,
+        activities_attributes: [ :name, :start_date, :end_date, :finished ]
+      )
     end
 end

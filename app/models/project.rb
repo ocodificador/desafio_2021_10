@@ -1,5 +1,6 @@
 class Project < ApplicationRecord
-  has_many :activities
+  has_many :activities, dependent: :destroy
+  accepts_nested_attributes_for :activities, allow_destroy: true
 
   validates_presence_of :name, message: "Nome do projeto não pode estar vazio"
   validates_presence_of :start_date, message: "Data de início precisa ser informada"
