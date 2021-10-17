@@ -1,5 +1,8 @@
 class Project < ApplicationRecord
+  # Talvez seja melhor mudar o migration e incluir on_delete: :cascade
+  # Assim a exclusão das atividades será feita pelo próprio banco
   has_many :activities, dependent: :destroy
+  
   accepts_nested_attributes_for :activities, allow_destroy: true
 
   validates_presence_of :name, message: "Nome do projeto não pode estar vazio"
