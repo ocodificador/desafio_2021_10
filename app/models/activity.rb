@@ -4,11 +4,11 @@ class Activity < ApplicationRecord
   validates_presence_of :name, message: "Nome da atividade não pode estar vazio"
   validates_presence_of :start_date, message: "Data de início precisa ser informada"
   validates_presence_of :end_date, message: "Não foi informada data de término"
-  validate :end_date_after_start_date  
+  validate :check_dates
   
   private
       
-  def end_date_after_start_date
+  def check_dates
     return if end_date.blank? || start_date.blank?  
     if end_date < start_date
       errors.add(:end_date, "Data de término não pode ser menor que data de início")
