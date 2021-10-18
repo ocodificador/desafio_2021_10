@@ -1,24 +1,46 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Simples solução em Rails + VueJS para atender [desafio](https://github.com/Artia/desafios-desevolvimento/blob/master/desafio-fullstack.md) do [Grupo EUAX](https://grupoeuax.com.br/carreira/).
 
-Things you may want to cover:
+
+API em JSON escrita em Rails 5.2.6, Ruby 2.7.4 "dockerizada"
+
 
 * Ruby version
 
 * System dependencies
 
-* Configuration
+* Configuração
 
-* Database creation
+```sh
+$ docker-compose build
+$ docker-compose run web bundle install
+```
 
-* Database initialization
+* Criação do banco de dados
+```sh
+$ docker-compose run web rails db:create
+```
 
-* How to run the test suite
+* Criação das tabelas
 
-* Services (job queues, cache servers, search engines, etc.)
+```sh
+$ docker-compose run web rails db:migrate
+```
 
-* Deployment instructions
+* Para executar os testes
+```sh
+$ docker-compose run web rspec
+```
 
-* ...
+* Para rodar em ambiente de desenvolvimento
+
+```sh
+$ docker-compose run -d
+```
+
+Então acesso pelo seu browser predileto [desafio](http://127.0.0.1:3791)
+
+* Para colocar em produção
+
+Essa fiquei devendo :D
