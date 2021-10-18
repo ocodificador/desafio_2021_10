@@ -1,36 +1,55 @@
 require 'rails_helper'
 
 RSpec.describe Project, type: :model do
-  # Alimentando o objeto com valores válidos
-  subject {
-    described_class.new(
-      name:  "Projeto para testar o modelo",
+
+  # Zero a tabela e crio um projeto com valores esperados
+  before(:all) do
+    Project.delete_all
+    @project = Project.create(
+      name: "Projeto para testar o modelo",
       start_date: DateTime.now,
-      end_date:  DateTime.now + 7.week
+      end_date:  DateTime.now + 1.week
     )
-  }
+  end
 
   it "Válido com atributos válidos" do
-    expect(subject).to be_valid
+    expect(@project).to be_valid
+  end
+
+  it 'Pode ser lido' do
+    expect(Project.find_by_name("Projeto para testar o modelo")).to eq(@project)
+  end
+
+  it 'Pode ser alterado' do
+    @project.update(name: "Project for testing the model")
+    expect(Project.find_by_name("Project for testing the model")).to eq(@project)
   end
 
   it "Inválido sem um nome" do
-    subject.name = nil
-    expect(subject).to_not be_valid
-  end
-
-  it "Inválido sem uma data inicial" do
-    subject.start_date = nil
-    expect(subject).to_not be_valid
-  end
-
-  it "Inválido sem uma data final" do
-    subject.end_date = nil
-    expect(subject).to_not be_valid
+    @project.name = nil
+    expect(@project).to_not be_valid
   end
 
   it "Inválido se a data final for menor que a inicial" do
-    subject.end_date = subject.start_date - 1
-    expect(subject).to_not be_valid
+    @project.end_date = @project.start_date - 1
+    expect(@project).to_not be_valid
   end
+
+  it "Inválido sem uma data inicial" do
+    @project.start_date = nil
+    expect(@project).to_not be_valid
+  end
+
+  it "Inválido sem uma data final" do
+    @project.end_date = nil
+    expect(@project).to_not be_valid
+  end
+
+  # Obiviamente só funcionará se Project.delete_all tiver sido executado
+  # no ínicio do teste e nenhuma outra instância da classe tenha sido criada
+  it 'Testando se pode ser excluído' do
+    @project.destroy
+    expect(Project.count).to eq(0)
+  end
+
 end
