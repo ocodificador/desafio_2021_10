@@ -49,9 +49,7 @@ Vue.createApp({
           });
       } else {
         axios
-          .put(`http://127.0.0.1:3000/projects/${project.id}`, project, {
-            errorHandle: false,
-          })
+          .patch(`http://127.0.0.1:3000/projects/${project.id}`, project)
           .then((response) => {
             this.getProjects();
           })
