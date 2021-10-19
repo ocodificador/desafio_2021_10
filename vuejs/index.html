@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Desafio ARTIA</title>
+    <link rel="stylesheet" href="iziToast.min.css" />    
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <div id="app">
+      <div>
+        <label>Projeto {{ currentProject.id }}</label>
+        <input type="text" v-model="currentProject.name" />
+        <input type="date" v-model="currentProject.start_date" />
+        <input type="date" v-model="currentProject.end_date" />
+        <div>
+          <button v-on:click="newProject">Novo</button>
+          <button v-on:click="saveProject(currentProject)">Gravar</button>
+          <button v-on:click="deleteProject(currentProject)">Excluir</button>
+          <button v-on:click="getProjects">Refresh</button>
+          <button v-on:click="newActivity">Nova Atividade</button>
+        </div>
+      </div>
+      <br />
+      <section v-if="errored">
+        <p>
+          Algo de errado aconteceu, não foi possível obter os dados, tente mais
+          tarde
+        </p>
+      </section>
+
+      <section v-else>
+        <div v-if="loading">Carregando...</div>
+        <div v-else>
+          <table>
+            <thead>
+              <tr>
+                <th>Nome do Projeto</th>
+                <th>Data Início</th>
+                <th>Data Fim</th>
+                <th>% Completo</th>
+                <th>Atrasado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="project in projects" v-on:click="getProject(project)">
+                <td>{{ project.name }}</td>
+                <td>{{ project.start_date }}</td>
+                <td>{{ project.end_date }}</td>
+                <td>{{ project.complete.toFixed(2) }}</td>
+                <td>
+                  <input
+                    type="checkbox"
+                    enabled="false"
+                    onclick="return false;"
+                    v-model="project.delayed"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <th>Nome da Tarefa</th>
+                <th>Data Início</th>
+                <th>Data Fim</th>
+                <th>Finalizada</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="activity in currentProject.activities">
+                <td>{{ activity.name }}</td>
+                <td>{{ activity.start_date }}</td>
+                <td>{{ activity.end_date }}</td>
+                <td>
+                  <input
+                    type="checkbox"
+                    enabled="false"
+                    onclick="return false;"
+                    v-model="activity.finished"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="iziToast.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
