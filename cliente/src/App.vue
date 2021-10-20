@@ -23,7 +23,11 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="project in projects" v-bind:key="project.id" v-on:click="getProject(project)">
+              <tr
+                v-for="project in projects"
+                v-bind:key="project.id"
+                v-on:click="getProject(project)"
+              >
                 <td>{{ project.name }}</td>
                 <td>{{ project.start_date }}</td>
                 <td>{{ project.end_date }}</td>
@@ -45,10 +49,19 @@
           <button v-on:click="saveProject(currentProject)">Gravar</button>
           <button v-on:click="deleteProject(currentProject)">Excluir</button>
           <button v-on:click="getProjects">Refresh</button>
-          <button v-on:click="newActivity">Nova Atividade</button>
+          <button v-on:click="newActivity(currentProject)">
+            Nova Atividade
+          </button>
         </div>
       </div>
       <div class="activities__list">
+        <section>
+          <hr>
+          <input type="text" v-model="currentActivity.name" />
+          <input type="date" v-model="currentActivity.start_date" />
+          <input type="date" v-model="currentActivity.end_date" />
+        </section>
+
         <table>
           <thead>
             <tr>
@@ -59,7 +72,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="activity in currentProject.activities" v-bind:key="activity.id">
+            <tr
+              v-for="activity in currentProject.activities"
+              v-bind:key="activity.id"
+              v-on:click="setActivity(activity)"
+            >
               <td>{{ activity.name }}</td>
               <td>{{ activity.start_date }}</td>
               <td>{{ activity.end_date }}</td>
@@ -97,6 +114,12 @@ export default {
         startDate: null,
         endDate: null,
       },
+      currentActivity: {
+        id: null,
+        name: null,
+        startDate: null,
+        endDate: null,
+      },
     };
   },
   methods: {
@@ -107,6 +130,16 @@ export default {
         startDate: null,
         endDate: null,
       };
+      this.newActivity();
+    },
+    newActivity(project) {
+      this.currentActivity = {
+        id: null,
+        name: null,
+        startDate: null,
+        endDate: null,
+      };
+      project.activities.push(this.currentActivity);
     },
     getProjects() {
       api
@@ -122,6 +155,10 @@ export default {
     },
     getProject(project) {
       this.currentProject = project;
+      this.currentActivity.id = null;
+    },
+    setActivity(activity) {
+      this.currentActivity = activity;
     },
     saveProject(project) {
       // Fazendo o Rails aceitar as atividades
@@ -184,7 +221,7 @@ export default {
   color: #2c3e50;
 
   margin: 1rem auto;
-  padding: 1rem;  
+  padding: 1rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
 }
 
@@ -192,11 +229,13 @@ export default {
   box-sizing: border-box;
 }
 
-h1 { text-align: center; }
+h1 {
+  text-align: center;
+}
 
 body {
   margin: 0;
-} 
+}
 
 button {
   margin-right: 5px;
@@ -274,7 +313,7 @@ td:hover {
   border-color: #ccc;
   border-spacing: 0;
   border-style: solid;
-  border-width: 2px;  
+  border-width: 2px;
 }
 
 .activities__list {
