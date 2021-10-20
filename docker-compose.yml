@@ -16,9 +16,12 @@ services:
     depends_on:
       - db
   vue:
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile-cliente
     volumes:
-      - ./cliente:/usr/src/app/my-app
+      - ./cliente:/app
+      - /app/node_modules
     ports:
       - "8080:8080"
     depends_on:
