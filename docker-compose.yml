@@ -10,8 +10,18 @@ services:
     build: .
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
-      - .:/myapp
+      - ./api:/myapp
     ports:
       - "3000:3000"
     depends_on:
       - db
+  vue:
+    build: .
+    volumes:
+      - ./cliente:/usr/src/app/my-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - web
+    environment:
+      - APISERVER="web"

@@ -5,21 +5,44 @@
 #   git config --global core.excludesfile '~/.gitignore_global'
 
 # Ignore bundler config.
-/.bundle
+/api/.bundle
 
 # Ignore all logfiles and tempfiles.
-/log/*
-/tmp/*
-!/log/.keep
-!/tmp/.keep
+/api/log/*
+/api/tmp/*
+/api/!/log/.keep
+/api/!/tmp/.keep
 
 # Ignore uploaded files in development
-/storage/*
-!/storage/.keep
+/api/storage/*
+/api/!/storage/.keep
 
-.byebug_history
+/api/.byebug_history
 
 # Ignore master key for decrypting credentials and more.
-/config/master.key
+/api/config/master.key
 
 /postgres
+.DS_Store
+/cliente/node_modules
+/cliente/dist
+
+
+# local env files
+/cliente/.env.local
+/cliente/.env.*.local
+
+# Log files
+/cliente/npm-debug.log*
+/cliente/yarn-debug.log*
+/cliente/yarn-error.log*
+/cliente/pnpm-debug.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
