@@ -39,7 +39,7 @@ $ docker-compose run web rspec
 $ docker-compose up -d
 ```
 
-Então acesso pelo seu browser predileto o [desafio](http://127.0.0.1:8000)
+Então acesso pelo seu browser predileto o [desafio](http://127.0.0.1:8080)
 
 * Para colocar em produção
 
