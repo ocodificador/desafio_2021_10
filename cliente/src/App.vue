@@ -12,80 +12,94 @@
       <section v-else>
         <div v-if="loading">Carregando...</div>
         <div v-else>
-          <table>
-            <thead>
-              <tr>
-                <th>Projetos</th>
-                <th>Data Início</th>
-                <th>Data Fim</th>
-                <th>% Completo</th>
-                <th>Atrasado</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="project in projects"
-                v-bind:key="project.id"
-                v-on:click="getProject(project)"
-              >
-                <td>{{ project.name }}</td>
-                <td>{{ project.start_date }}</td>
-                <td>{{ project.end_date }}</td>
-                <td>{{ project.complete.toFixed(2) }}</td>
-                <td>{{ project.delayed ? "Sim" : "Não" }}</td>
-              </tr>
-            </tbody>
-          </table>
+          <div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Projetos</th>
+                  <th>Data Início</th>
+                  <th>Data Fim</th>
+                  <th>% Completo</th>
+                  <th>Atrasado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="project in projects"
+                  v-bind:key="project.id"
+                  v-on:click="getProject(project)"
+                >
+                  <td>{{ project.name }}</td>
+                  <td>{{ project.start_date }}</td>
+                  <td>{{ project.end_date }}</td>
+                  <td>{{ project.complete.toFixed(2) }}</td>
+                  <td>{{ project.delayed ? "Sim" : "Não" }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="activities__list">
+            <table>
+              <thead>
+                <tr>
+                  <th>Atividades</th>
+                  <th>Data Início</th>
+                  <th>Data Fim</th>
+                  <th>Finalizada</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="activity in currentProject.activities"
+                  v-bind:key="activity.id"
+                  v-on:click="setActivity(activity)"
+                >
+                  <td>{{ activity.name }}</td>
+                  <td>{{ activity.start_date }}</td>
+                  <td>{{ activity.end_date }}</td>
+                  <td>
+                    <input type="checkbox" v-model="activity.finished" />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
     </aside>
+
     <div class="project__detail">
       <div>
-        <input type="text" v-model="currentProject.name" />
-        <input type="date" v-model="currentProject.start_date" />
-        <input type="date" v-model="currentProject.end_date" />
-        <div>
-          <button v-on:click="newProject">Novo</button>
-          <button v-on:click="saveProject(currentProject)">Gravar</button>
-          <button v-on:click="deleteProject(currentProject)">Excluir</button>
-          <button v-on:click="getProjects">Refresh</button>
-          <button v-on:click="newActivity(currentProject)">
-            Nova Atividade
-          </button>
-        </div>
+        <fieldset>
+          <legend>Projeto</legend>
+          <input type="text" v-model="currentProject.name" />
+          <input type="date" v-model="currentProject.start_date" />
+          <input type="date" v-model="currentProject.end_date" />
+
+          <div>
+            <button v-on:click="newProject">Novo</button>
+            <button v-on:click="saveProject(currentProject)">Gravar</button>
+            <button v-on:click="getProjects">Refresh</button>
+            <button
+              v-on:click="deleteProject(currentProject)"
+              style="float:right"
+            >
+              Excluir
+            </button>
+          </div>
+        </fieldset>
       </div>
-      <div class="activities__list">
-        <section>
-          <hr>
+      <br />
+      <div>
+        <fieldset>
+          <legend>Atividade</legend>
           <input type="text" v-model="currentActivity.name" />
           <input type="date" v-model="currentActivity.start_date" />
           <input type="date" v-model="currentActivity.end_date" />
-        </section>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Atividades</th>
-              <th>Data Início</th>
-              <th>Data Fim</th>
-              <th>Finalizada</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="activity in currentProject.activities"
-              v-bind:key="activity.id"
-              v-on:click="setActivity(activity)"
-            >
-              <td>{{ activity.name }}</td>
-              <td>{{ activity.start_date }}</td>
-              <td>{{ activity.end_date }}</td>
-              <td>
-                <input type="checkbox" v-model="activity.finished" />
-              </td>
-            </tr>
-          </tbody>
-        </table>
+          <button v-on:click="newActivity(currentProject)" style="float:right">
+            Nova Atividade
+          </button>
+        </fieldset>
       </div>
     </div>
   </div>
@@ -155,7 +169,11 @@ export default {
     },
     getProject(project) {
       this.currentProject = project;
-      this.currentActivity.id = null;
+      if (project.activities.length > 0) {
+        this.currentActivity = project.activities[0];
+      } else {
+        this.currentActivity = {};
+      }
     },
     setActivity(activity) {
       this.currentActivity = activity;
@@ -302,6 +320,11 @@ td:hover {
   overflow: auto;
 }
 
+.activities__list {
+  margin-top: 1rem;
+  overflow: auto;
+}
+
 .project__detail {
   flex: 1;
   overflow: auto;
@@ -313,11 +336,7 @@ td:hover {
   border-color: #ccc;
   border-spacing: 0;
   border-style: solid;
-  border-width: 2px;
-}
-
-.activities__list {
-  margin-top: 1rem;
-  overflow: auto;
+  border-width: 1px;
+  position: relative;
 }
 </style>
